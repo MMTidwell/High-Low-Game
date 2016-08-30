@@ -17,21 +17,34 @@
 //	- check if it is a int
 //	- 'exit' the game
 //	- add in images http://smashingtips.com/linux/cool-terminal-commands-for-linux
+//	√ - get high number and low number from client
+// 	√ - get user name
+//  √ - welcome user
 
 
+// =========== VARIABLES =================
+$minNumber = 1;
+$maxNumber = 100;
 
+$userMin = (isset($argv[1])) ? $argv[1] : $minNumber;
+$userMax = (isset($argv[2])) ? $argv[2] : $maxNumber;
 
 // =========== GAME =================
-function game() {
-	// game intro
+function game($userMin, $userMax) {
 	// random number gen
-	$randomNumber = rand(1, 100) . PHP_EOL;
+	$randomNumber = mt_rand($userMin, $userMax) . PHP_EOL;
 	$count = 0;
-	
+
 	// clears out terminal 
 	echo "\033c";
-	echo "Can You Guess My Number?" . PHP_EOL;
-	fwrite(STDOUT, "I'll give you a hint, it is between 1 and 100!" . PHP_EOL);
+
+	// gets client name
+	fwrite(STDOUT, "What is your name?" . PHP_EOL);
+	$name = fgets(STDIN);
+	echo "Welcome to the number guessing game $name" . PHP_EOL;
+
+	// gets number from client
+	fwrite(STDOUT, "Can You Guess My Number? \nIt's between $userMin and $userMax" . PHP_EOL);
 	$guess = fgets(STDIN);
 
 	// checks if first guess is correct then moves to higher/lower until correct
@@ -69,4 +82,4 @@ function playAgain() {
 	}
 }
 
-game();
+game($userMin, $userMax);
