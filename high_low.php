@@ -15,6 +15,8 @@
 //	√ - convert to functions
 //	√ - replay game
 //	- check if it is a int
+//	- 'exit' the game
+//	- add in images http://smashingtips.com/linux/cool-terminal-commands-for-linux
 
 
 
@@ -26,6 +28,8 @@ function game() {
 	$randomNumber = rand(1, 100) . PHP_EOL;
 	$count = 0;
 	
+	// clears out terminal 
+	echo "\033c";
 	echo "Can You Guess My Number?" . PHP_EOL;
 	fwrite(STDOUT, "I'll give you a hint, it is between 1 and 100!" . PHP_EOL);
 	$guess = fgets(STDIN);
@@ -38,12 +42,10 @@ function game() {
 		} else if ($randomNumber > $guess) {
 			echo "Your guess was too low. Try again." . PHP_EOL;
 			$guess = fgets(STDIN);
-			$count += 1;
 		} else if ($randomNumber < $guess) {
 			echo "Your guess was too high. Try again." . PHP_EOL;
 			$guess = fgets(STDIN);
-			$count += 1;
-		}
+		}$count += 1;
 	} while ($randomNumber != $guess);
 
 	// when guess is correct 
@@ -58,9 +60,11 @@ function playAgain() {
 	$playAgain = trim(fgets(STDIN));
 	if ($playAgain == "y" || $playAgain == "Y") {
 		echo "\n";
+
 		game();
 	} else {
 		echo "Bye Felicia!" . PHP_EOL;
+		echo "\033c";
 		exit(0);
 	}
 }
