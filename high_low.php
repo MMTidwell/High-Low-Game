@@ -11,6 +11,8 @@
 // 	- use exit(0) to end game
 // 	- if stuck ctrl-c will exit
 
+// =========== VARIABLES =================
+$count = 0;
 
 // =========== RANDOM NUMBER GEN =================
 				// min num, high num
@@ -28,11 +30,15 @@ do {
 	} else if ($randomNumber > $guess) {
 		echo "Your guess was too low. Try again." . PHP_EOL;
 		$guess = fgets(STDIN);
+		$count += 1;
 	} else {
 		echo "Your guess was too high. Try again." . PHP_EOL;
 		$guess = fgets(STDIN);
+		$count += 1;
 	}
 } while ($randomNumber != $guess);
 
-
+if ($randomNumber == $guess) {
+	echo "YOU GUESSED IT....FINALLY AFTER $count!!". PHP_EOL;
+}
 
