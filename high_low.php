@@ -14,8 +14,8 @@
 //	√ - count var to count tries
 //	√ - convert to functions
 //	√ - replay game
-//	- check if it is a int
-//	- 'exit' the game
+//	√ - check if it is a int
+//	√ - 'exit' the game
 //	- add in images http://smashingtips.com/linux/cool-terminal-commands-for-linux
 //	√ - get high number and low number from client
 // 	√ - get user name
@@ -26,14 +26,15 @@
 $minNumber = 1;
 $maxNumber = 100;
 
-$userMin = (isset($argv[1])) ? $argv[1] : $minNumber;
-$userMax = (isset($argv[2])) ? $argv[2] : $maxNumber;
+$userMin = (is_numeric($argv[1])) ? $argv[1] : $minNumber;
+$userMax = (is_numeric($argv[2])) ? $argv[2] : $maxNumber;
 
 // =========== GAME =================
 function game($userMin, $userMax) {
+	$count = 0;
+
 	// random number gen
 	$randomNumber = mt_rand($userMin, $userMax) . PHP_EOL;
-	$count = 0;
 
 	// clears out terminal 
 	echo "\033c";
@@ -45,7 +46,7 @@ function game($userMin, $userMax) {
 
 	// gets number from client
 	fwrite(STDOUT, "Can You Guess My Number? \nIt's between $userMin and $userMax" . PHP_EOL);
-	$guess = fgets(STDIN);
+	$guess = trim(fgets(STDIN));
 
 	// checks if first guess is correct then moves to higher/lower until correct
 	do {
@@ -54,12 +55,14 @@ function game($userMin, $userMax) {
 			playAgain();
 		} else if ($randomNumber > $guess) {
 			echo "Your guess was too low. Try again." . PHP_EOL;
-			$guess = fgets(STDIN);
+			$guess = trim(fgets(STDIN));
 		} else if ($randomNumber < $guess) {
 			echo "Your guess was too high. Try again." . PHP_EOL;
-			$guess = fgets(STDIN);
-		}$count += 1;
-	} while ($randomNumber != $guess);
+			$guess = trim(fgets(STDIN));
+		} else if ($guess == "exit") {
+			exit(0);
+		} $count += 1;
+	} while ($randomNumber != $guess xor $guess == 'exit');
 
 	// when guess is correct 
 	if ($randomNumber == $guess) {
