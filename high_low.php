@@ -21,8 +21,14 @@
 $minNumber = 1;
 $maxNumber = 100;
 
+// checks for arg passed when opening file, if not then it will result to 1 and 100
 $userMin = (is_numeric($argv[1])) ? $argv[1] : $minNumber;
 $userMax = (is_numeric($argv[2])) ? $argv[2] : $maxNumber;
+
+// gets clients name and welcomes them
+fwrite(STDOUT, "What is your name?" . PHP_EOL);
+$name = trim(fgets(STDIN));
+echo "Welcome to the number guessing game $name" . PHP_EOL;
 
 $winner = <<< WINNER
                                                             
@@ -50,29 +56,30 @@ $winner = <<< WINNER
 WINNER;
 
 
-fwrite(STDOUT, "What is your name?" . PHP_EOL);
-$name = fgets(STDIN);
-echo "Welcome to the number guessing game $name" . PHP_EOL;
-
-
 // =========== GAME INTRO =================
 function gameIntro($userMin, $userMax, $winner) {
-	$randomNumber = mt_rand($userMin, $userMax) . PHP_EOL;
-	
 	// clears out terminal 
 	echo "\033c";
 	
 	// gets number from client
 	fwrite(STDOUT, "Can You Guess My Number? \nIt's between $userMin and $userMax" . PHP_EOL . PHP_EOL);
 
-	game($randomNumber, $winner);
+	game($winner, $userMin, $userMax);
 }
 
 
 // =========== GAME =================
-function game($randomNumber, $winner) {
-	$guess = trim(fgets(STDIN));
+function game($winner, $userMin, $userMax) {
+	// checks if guess is a number
+	do {	
+		$guess = trim(fgets(STDIN));
+		if (!is_numeric($guess)) {
+			echo "Must be a number, Enter a new NUMBER: ";
+		}
+	} while (!is_numeric($guess) && $guess != 'exit');
+
 	$count = 0;
+	$randomNumber = mt_rand($userMin, $userMax);
 
 	// checks if first guess is correct then moves to higher/lower until correct
 	do {
@@ -81,10 +88,10 @@ function game($randomNumber, $winner) {
 			playAgain($randomNumber, $winner);
 		} else if ($randomNumber > $guess) {
 			echo "Your guess was too low. Try again." . PHP_EOL;
-			$guess = fgets(STDIN);
+			$guess = trim(fgets(STDIN));
 		} else if ($randomNumber < $guess) {
 			echo "Your guess was too high. Try again." . PHP_EOL;
-			$guess = fgets(STDIN);
+			$guess = trim(fgets(STDIN));
 		} else if ($guess == 'exit') {
 			exit(0);
 		} $count += 1;
@@ -99,7 +106,7 @@ function game($randomNumber, $winner) {
 
 
 // =========== PLAY AGAIN =================
-function playAgain($randomNumber, $winner) {
+function playAgain($winner) {
 	$minNumber = 1;
 	$maxNumber = 100;
 
